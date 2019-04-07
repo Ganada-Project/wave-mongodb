@@ -66,8 +66,6 @@ exports.login = (req, res) => {
   const { username, password } = req.body
   const secret = req.app.get('jwt-secret')
 
-  // check the user info & generate the jwt
-  // check the user info & generate the jwt
   const check = (user) => {
     if (!user) {
       // user does not exist
@@ -80,13 +78,13 @@ exports.login = (req, res) => {
           jwt.sign(
             {
               _id: user._id,
-              username: user.username,
+              username: user.auth.username,
               admin: user.admin
             },
             secret,
             {
-              expiresIn: '7d',
-              issuer: 'velopert.com',
+              // expiresIn: '7d',
+              issuer: 'ganadaproject@gmail.com',
               subject: 'userInfo'
             }, (err, token) => {
               if (err) reject(err)
