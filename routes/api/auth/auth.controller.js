@@ -1,15 +1,8 @@
 const jwt = require('jsonwebtoken')
 const User = require('../../../models/user')
-/*
-    POST /api/auth
-    {
-        username,
-        password
-    }
-*/
 
 exports.register = (req, res) => {
-  const { username, password } = req.body
+  const { username, password, name, phone, address, height, weight, foot, waist } = req.body
   let newUser = null
 
   // create a new user if does not exist
@@ -17,7 +10,7 @@ exports.register = (req, res) => {
     if (user) {
       throw new Error('username exists')
     } else {
-      return User.create(username, password)
+      return User.create(username, password, name, phone, address, height, weight, foot, waist)
     }
   }
 

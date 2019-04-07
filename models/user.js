@@ -4,20 +4,49 @@ const crypto = require('crypto')
 const config = require('../config')
 
 const User = new Schema({
-    username: String,
-    password: String,
+    // Authentication
+    auth: { 
+        username: String,
+        password: String,
+    },
+    // Biography
+    bio: {
+        name: String,
+        phone: String,
+        address: String,
+    },
+    // Body Measurements
+    body: {
+        height: Number,
+        weight: Number,
+        foot: Number,
+        waist: Number,
+    },
+    // Admin
     admin: { type: Boolean, default: false }
 });
 
-// create new User document
-User.statics.create = function (username, password) {
+User.statics.create = function (username, password, name, phone, address, height, weight, foot, waist) {
     const encrypted = crypto.createHmac('sha1', config.secret)
         .update(password)
         .digest('base64')
 
     const user = new this({
-        username,
-        password: encrypted
+        auth: {
+            username,
+            password: encrypted
+        },
+        bio: {
+            name,
+            phone,
+            address,
+        },
+        body: {
+            height,
+            weight,
+            foot,
+            waist,
+        },
     })
 
     // return the Promise
@@ -27,7 +56,7 @@ User.statics.create = function (username, password) {
 // find one user by using username
 User.statics.findOneByUsername = function(username) {
     return this.findOne({
-        username
+        'auth.username': username
     }).exec()
 };
 
@@ -38,7 +67,7 @@ User.methods.verify = function (password) {
         .update(password)
         .digest('base64')
 
-    return this.password === encrypted
+    return this.auth.password === encrypted
 }
 
 User.methods.assignAdmin = function() {
