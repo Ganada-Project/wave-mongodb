@@ -1,19 +1,52 @@
 const jwt = require('jsonwebtoken')
 const User = require('../../../models/user')
+const AWS = require('aws-sdk');
+AWS.config.region = 'ap-northeast-2';
+const s3 = new AWS.S3();
+const crypto = require('crypto');
 
 exports.register = async(req, res) => {
-  const { username, password, name, phone, address, height, weight, foot, waist, base_64, body_points } = req.body
+  const { username, password, name, phone, address, height, weight, foot, waist, base64, body_points } = req.body
   let newUser = null
-  let img_url = "http://www.kozoom.co.kr/thumbnails/original/uploads/events/17842/news/115f3b8c07d933ff693c96d58d7d5bd5350fdac2.jpg.jpg"
+  
   // create a new user if does not exist
-  const create = (user) => {
+  
+  
+
+  const upload = (user) => {
     if (user) {
       throw new Error('username exists')
     } else {
-      return User.create(username, password, name, phone, address, height, weight, foot, waist, img_url, body_points)
+      const image = new Promise((resolve, reject) => {
+        const d = new Date();
+        d.setUTCHours(d.getUTCHours());
+        const picKey = d.getFullYear() + '_'
+          + d.getMonth() + '_'
+          + d.getDate() + '_'
+          + crypto.randomBytes(20).toString('hex') + '.jpg';
+        const image_url = `https://s3.ap-northeast-2.amazonaws.com/wave-bucket-seoul/${picKey}`;
+        let buf = new Buffer(base64.replace(/^data:image\/\w+;base64,/, ''), 'base64');
+        s3.putObject({
+          Bucket: 'wave-bucket-seoul',
+          Key: picKey,
+          Body: buf,
+          ACL: 'public-read'
+        }, function (err, response) {
+          if (err) reject(err);
+          else {
+            // console.log("1", image_url);
+            return resolve(image_url);
+          }
+        });
+      });
+
+      return image;
+      
     }
   }
-
+  const create = (picUrl) => {
+    return User.create(username, password, name, phone, address, height, weight, foot, waist, picUrl, body_points)
+  }
   // count the number of the user
   const count = (user) => {
     newUser = user
@@ -47,6 +80,7 @@ exports.register = async(req, res) => {
 
   // check username duplication
   User.findOneByUsername(username)
+    .then(upload)
     .then(create)
     .then(count)
     .then(assign)
