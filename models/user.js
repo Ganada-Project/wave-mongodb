@@ -21,12 +21,14 @@ const User = new Schema({
         weight: Number,
         foot: Number,
         waist: Number,
+        image_url: String,
+        body_points: [Object]
     },
     // Admin
     admin: { type: Boolean, default: false }
 });
 
-User.statics.create = function (username, password, name, phone, address, height, weight, foot, waist) {
+User.statics.create = function (username, password, name, phone, address, height, weight, foot, waist, image_url, body_points) {
     const encrypted = crypto.createHmac('sha1', config.secret)
         .update(password)
         .digest('base64')
@@ -46,6 +48,8 @@ User.statics.create = function (username, password, name, phone, address, height
             weight,
             foot,
             waist,
+            image_url,
+            body_points
         },
     })
 

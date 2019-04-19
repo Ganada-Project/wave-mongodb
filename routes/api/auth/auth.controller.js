@@ -1,16 +1,16 @@
 const jwt = require('jsonwebtoken')
 const User = require('../../../models/user')
 
-exports.register = (req, res) => {
-  const { username, password, name, phone, address, height, weight, foot, waist } = req.body
+exports.register = async(req, res) => {
+  const { username, password, name, phone, address, height, weight, foot, waist, base_64, body_points } = req.body
   let newUser = null
-
+  let img_url = "http://www.kozoom.co.kr/thumbnails/original/uploads/events/17842/news/115f3b8c07d933ff693c96d58d7d5bd5350fdac2.jpg.jpg"
   // create a new user if does not exist
   const create = (user) => {
     if (user) {
       throw new Error('username exists')
     } else {
-      return User.create(username, password, name, phone, address, height, weight, foot, waist)
+      return User.create(username, password, name, phone, address, height, weight, foot, waist, img_url, body_points)
     }
   }
 
