@@ -43,12 +43,7 @@ exports.register = async(req, res) => {
   const create = (picUrl) => {
     return User.create(username, password, name, phone, address, age, gender, profile_img_url, height, weight, foot, waist, picUrl, body_points)
   }
-
-  const count = (user) => {
-    newUser = user
-    return User.count({}).exec()
-  }
-
+  
   const assign = (count) => {
     if (count === 1) {
       return newUser.assignAdmin()
@@ -58,10 +53,26 @@ exports.register = async(req, res) => {
   }
   
   const respond = (isAdmin) => {
-    res.json({
-      message: 'registered successfully',
-      admin: isAdmin ? true : false
-    })
+    const secret = req.app.get('jwt-secret')
+    jwt.sign(
+      {
+        // _id: user.,
+        username: username,
+        admin: isAdmin
+      },
+      secret,
+      {
+        // expiresIn: '7d',
+        issuer: 'ganadaproject@gmail.com',
+        subject: 'userInfo'
+      }, (err, token) => {
+        if (err) reject(err)
+        res.json({
+          message: 'registered successfully',
+          token: token,
+          admin: isAdmin ? true : false
+        })
+      })
   }
 
   // run when there is an error (username exists)
@@ -75,7 +86,6 @@ exports.register = async(req, res) => {
   User.findOneByUsername(username)
     .then(upload)
     .then(create)
-    .then(count)
     .then(assign)
     .then(respond)
     .catch(onError)
@@ -104,9 +114,9 @@ exports.login = (req, res) => {
         const p = new Promise((resolve, reject) => {
           jwt.sign(
             {
-              _id: user._id,
-              username: user.auth.username,
-              admin: user.admin
+              // _id: user._id,
+              username: username,
+              admin: isAdmin
             },
             secret,
             {
