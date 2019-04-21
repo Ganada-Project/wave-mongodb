@@ -19,8 +19,8 @@ const app = express();
 
 // parse JSON and url-encoded query
 
-app.use(bodyParser.json({ limit: '1000mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '1000mb' }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 // app.use(bodyParser.urlencoded({extended: false}));
 // app.use(bodyParser.json());
