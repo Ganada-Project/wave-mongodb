@@ -6,13 +6,9 @@ const s3 = new AWS.S3();
 const crypto = require('crypto');
 
 exports.register = async(req, res) => {
-  const { username, password, name, phone, address, height, weight, foot, waist, base64, body_points } = req.body
-  let newUser = null
+  const { username, password, name, phone, address, age, gender, profile_img_url, height, weight, foot, waist, base64, body_points } = req.body
+  let newUser = null;
   
-  // create a new user if does not exist
-  
-  
-
   const upload = (user) => {
     if (user) {
       throw new Error('username exists')
@@ -45,25 +41,22 @@ exports.register = async(req, res) => {
     }
   }
   const create = (picUrl) => {
-    return User.create(username, password, name, phone, address, height, weight, foot, waist, picUrl, body_points)
+    return User.create(username, password, name, phone, address, age, gender, profile_img_url, height, weight, foot, waist, picUrl, body_points)
   }
-  // count the number of the user
+
   const count = (user) => {
     newUser = user
     return User.count({}).exec()
   }
 
-  // assign admin if count is 1
   const assign = (count) => {
     if (count === 1) {
       return newUser.assignAdmin()
     } else {
-      // if not, return a promise that returns false
       return Promise.resolve(false)
     }
   }
-
-  // respond to the client
+  
   const respond = (isAdmin) => {
     res.json({
       message: 'registered successfully',
