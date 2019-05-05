@@ -1,4 +1,16 @@
 const User = require('../../../models/user')
+var ObjectId = require('mongoose').Types.ObjectId;
+
+exports.me = (req, res) => {
+  User.findOne({_id: ObjectId(req.decoded._id)})
+    .then(
+      user => {
+        res.json({ 
+          user 
+        })
+      }
+    )
+}
 
 /* 
     GET /api/user/list
@@ -18,7 +30,6 @@ exports.list = (req, res) => {
         res.json({ users })
       }
     )
-
 }
 
 

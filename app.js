@@ -18,8 +18,16 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 // parse JSON and url-encoded query
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+
+app.use(bodyParser.json({
+    limit: '20mb'
+}));
+
+app.use(bodyParser.urlencoded({
+    limit: '20mb',
+    parameterLimit: 100000,
+    extended: true
+}));
 
 // print the request log on console
 app.use(morgan('dev'));
