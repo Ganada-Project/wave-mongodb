@@ -51,12 +51,28 @@ const faker = require('faker');
 //         message: '100 items are generated successfully'
 //     });
 // }
-exports.items = async (req, res) => {
+exports.createItems = async (req, res) => {
     const items = req.body;
     for (let item of items){
         await Item.create(item);
     }
     return res.status(200).json({
         message: 'Item created successfully'
+    });
+};
+
+exports.getItems = async (req, res) => {
+    const {start, size} = req.params;
+    const items = await Item.get(start,size);
+    const length = items.length;
+    let nextStart = parseInt(start)+length;
+    if(length <size){
+        nextStart = -1;
+    }
+    return res.status(200).json({
+        message: 'Items are returned successfully',
+        numberOfItemsReturned: length,
+        nextStart: nextStart,
+        items
     });
 };

@@ -93,6 +93,14 @@ Item.statics.create = function ({name,
     return item.save()
 };
 
+Item.statics.get = async function(start,size){
+  const items = await this.find().sort();
+  console.log(items.length);
+  const itemsToReturn = items.slice(start,start+size);
+  console.log(itemsToReturn.length);
+  return itemsToReturn;
+};
+
 Item.statics.truncate = function (){
     return this.deleteMany({}).exec()
 }
