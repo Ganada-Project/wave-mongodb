@@ -114,7 +114,7 @@ exports.login = (req, res) => {
         const p = new Promise((resolve, reject) => {
           jwt.sign(
             {
-              _id: user._id,
+              // _id: user._id,
               username: username,
               // admin: isAdmin
             },

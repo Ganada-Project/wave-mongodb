@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Item = require('../../../models/item');
+const User = require('../../../models/user');
 const faker = require('faker');
 
 // exports.faker = async (req, res) => {
@@ -76,3 +77,36 @@ exports.getItems = async (req, res) => {
         items
     });
 };
+
+exports.rentItemByItemId = async (req, res) => {
+    const { item_id } = req.body;
+    
+    try {
+        let item = await Item.findOneById(item_id);
+        item.reservation += 1;
+        await item.save();
+        let user = await User.findOneByUsername(req.decoded.username);
+        let object = {
+            _id: item_id,
+            rent_time: new Date()
+        }
+        if ((user.shopping.hanger - item.coin) > 0) {
+            user.shopping.hanger -= item.coin;
+            user.shopping.items.push(object);
+            await user.save();
+            return res.status(200).json({
+                message: 'rent successfully'
+            })
+        } else {
+            return res.status(200).json({
+                message: 'not enough hangers'
+            })
+        }
+        
+    } catch (err) {
+        res.status(406).json({
+            err
+        })
+    }
+    
+}

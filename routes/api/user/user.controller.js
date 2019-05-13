@@ -1,5 +1,5 @@
 const User = require('../../../models/user')
-var ObjectId = require('mongoose').Types.ObjectId;
+const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.me = (req, res) => {
   User.findOne({_id: ObjectId(req.decoded._id)})

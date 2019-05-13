@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const config = require('../config');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 const Item = new Schema({
     name: String,
@@ -104,4 +105,12 @@ Item.statics.get = async function(start,size){
 Item.statics.truncate = function (){
     return this.deleteMany({}).exec()
 }
+
+Item.statics.findOneById = function (item_id) {
+    return this.findOne({ 
+        _id: ObjectId(item_id) 
+    }).exec()
+};
+
+
 module.exports = mongoose.model('Item', Item);

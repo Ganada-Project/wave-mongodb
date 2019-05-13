@@ -2,12 +2,17 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const crypto = require('crypto')
 const config = require('../config')
+const ObjectId = require('mongoose').Types.ObjectId;
 
 const User = new Schema({
     // Authentication
     auth: { 
         username: String,
         password: String,
+    },
+    shopping: {
+        hanger: Number,
+        items: [Object]
     },
     // Biography
     bio: {
@@ -40,6 +45,10 @@ User.statics.create = function (username, password, name, phone, address, age, g
         auth: {
             username,
             password: encrypted
+        },
+        shopping: {
+            hanger: 0,
+            items: []
         },
         bio: {
             name,
