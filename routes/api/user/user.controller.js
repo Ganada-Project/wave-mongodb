@@ -2,7 +2,7 @@ const User = require('../../../models/user')
 const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.me = (req, res) => {
-  User.findOne({_id: ObjectId(req.decoded._id)})
+  User.findOne({'auth.username': req.decoded.username})
     .then(
       user => {
         res.json({ 
