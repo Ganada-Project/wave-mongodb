@@ -44,21 +44,14 @@ exports.register = async(req, res) => {
     return User.create(username, password, name, phone, address, age, gender, profile_img_url, height, weight, foot, waist, picUrl, body_points)
   }
   
-  const assign = (count) => {
-    if (count === 1) {
-      return newUser.assignAdmin()
-    } else {
-      return Promise.resolve(false)
-    }
-  }
-  
-  const respond = (isAdmin) => {
+  const respond = (user) => {
     const secret = req.app.get('jwt-secret')
+    // console.log(user._id);
     jwt.sign(
       {
-        // _id: user.,
+        _id: user._id,
         username: username,
-        admin: isAdmin
+        // admin: isAdmin
       },
       secret,
       {
@@ -70,7 +63,7 @@ exports.register = async(req, res) => {
         res.json({
           message: 'registered successfully',
           token: token,
-          admin: isAdmin ? true : false
+          // admin: isAdmin ? true : false
         })
       })
   }
@@ -83,12 +76,22 @@ exports.register = async(req, res) => {
   }
 
   // check username duplication
-  User.findOneByUsername(username)
-    .then(upload)
-    .then(create)
-    .then(assign)
-    .then(respond)
-    .catch(onError)
+
+  try {
+    let user = await User.findOneByUsername(username);
+    let image_url = await upload(user);
+    let created_user = await create(image_url);
+    await respond(created_user);
+  } catch (err) {
+    res.status(409).json({
+      message: err.message
+    })
+  }
+  // User.findOneByUsername(username)
+  //   .then(upload)
+  //   .then(create)
+  //   .then(respond)
+  //   .catch(onError)
 }
 
 /*
@@ -114,7 +117,7 @@ exports.login = (req, res) => {
         const p = new Promise((resolve, reject) => {
           jwt.sign(
             {
-              // _id: user._id,
+              _id: user._id,
               username: username,
               // admin: isAdmin
             },
