@@ -2,11 +2,13 @@ const User = require('../../../models/user')
 const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.me = (req, res) => {
-  User.findOne({'auth.username': req.decoded.username})
+  User.findOne({
+      'auth.username': req.decoded.username
+    })
     .then(
       user => {
-        res.json({ 
-          user 
+        res.json({
+          user
         })
       }
     )
@@ -27,7 +29,9 @@ exports.list = (req, res) => {
   User.find({})
     .then(
       users => {
-        res.json({ users })
+        res.json({
+          users
+        })
       }
     )
 }

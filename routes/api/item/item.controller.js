@@ -54,7 +54,7 @@ const faker = require('faker');
 // }
 exports.createItems = async (req, res) => {
     const items = req.body;
-    for (let item of items){
+    for (let item of items) {
         await Item.create(item);
     }
     return res.status(200).json({
@@ -63,11 +63,14 @@ exports.createItems = async (req, res) => {
 };
 
 exports.getItems = async (req, res) => {
-    const {start, size} = req.params;
-    const items = await Item.get(start,size);
+    const {
+        start,
+        size
+    } = req.params;
+    const items = await Item.get(start, size);
     const length = items.length;
-    let nextStart = parseInt(start)+length;
-    if(length <size){
+    let nextStart = parseInt(start) + length;
+    if (length < size) {
         nextStart = -1;
     }
     return res.status(200).json({
@@ -79,8 +82,10 @@ exports.getItems = async (req, res) => {
 };
 
 exports.rentItemByItemId = async (req, res) => {
-    const { item_id } = req.body;
-    
+    const {
+        item_id
+    } = req.body;
+
     try {
         let item = await Item.findOneById(item_id);
         item.reservation += 1;
@@ -102,11 +107,11 @@ exports.rentItemByItemId = async (req, res) => {
                 message: 'not enough hangers'
             })
         }
-        
+
     } catch (err) {
         res.status(406).json({
             err
         })
     }
-    
+
 }

@@ -6,7 +6,7 @@ const s3 = new AWS.S3();
 const crypto = require('crypto');
 
 exports.register = async(req, res) => {
-  const { username, password, name, phone, address, age, gender, profile_img_url, height, weight, foot, waist, base64, body_points } = req.body
+  const { username, password, fcm_token, name, phone, address, age, gender, profile_img_url, height, weight, foot, waist, base64, body_points } = req.body
   let newUser = null;
   
   const upload = (user) => {
@@ -41,7 +41,7 @@ exports.register = async(req, res) => {
     }
   }
   const create = (picUrl) => {
-    return User.create(username, password, name, phone, address, age, gender, profile_img_url, height, weight, foot, waist, picUrl, body_points)
+    return User.create(username, password, fcm_token, name, phone, address, age, gender, profile_img_url, height, weight, foot, waist, picUrl, body_points)
   }
   
   const respond = (user) => {

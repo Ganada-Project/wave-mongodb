@@ -6,7 +6,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 
 const User = new Schema({
     // Authentication
-    auth: { 
+    auth: {
         username: String,
         password: String,
     },
@@ -33,18 +33,22 @@ const User = new Schema({
         body_points: [Object]
     },
     // Admin
-    admin: { type: Boolean, default: false }
+    admin: {
+        type: Boolean,
+        default: false
+    }
 });
 
-User.statics.create = function (username, password, name, phone, address, age, gender, profile_img_url, height, weight, foot, waist, image_url, body_points) {
+User.statics.create = function (username, password, fcm_token, name, phone, address, age, gender, profile_img_url, height, weight, foot, waist, image_url, body_points) {
     const encrypted = crypto.createHmac('sha1', config.secret)
         .update(password)
         .digest('base64')
-    
+
     const user = new this({
         auth: {
             username,
-            password: encrypted
+            password: encrypted,
+            fcm_token
         },
         shopping: {
             hanger: 0,
@@ -73,7 +77,7 @@ User.statics.create = function (username, password, name, phone, address, age, g
 }
 
 // find one user by using username
-User.statics.findOneByUsername = function(username) {
+User.statics.findOneByUsername = function (username) {
     return this.findOne({
         'auth.username': username
     }).exec()
@@ -89,7 +93,7 @@ User.methods.verify = function (password) {
     return this.auth.password === encrypted
 }
 
-User.methods.assignAdmin = function() {
+User.methods.assignAdmin = function () {
     this.admin = true;
     return this.save()
 };
