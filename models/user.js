@@ -9,6 +9,7 @@ const User = new Schema({
     auth: {
         username: String,
         password: String,
+        fcm_token: String
     },
     shopping: {
         hanger: Number,
