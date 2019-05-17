@@ -2,6 +2,7 @@ const User = require('../../../models/user')
 const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.me = (req, res) => {
+  
   User.findOne({
       'auth.username': req.decoded.username
     })
@@ -12,6 +13,29 @@ exports.me = (req, res) => {
         })
       }
     )
+}
+
+exports.updateFCM = async(req, res) => {
+  const { fcm_token } = req.body;
+
+  try {
+    // GET USER BY USERNAME
+    let user = await User.findOne({
+      'auth.username': req.decoded.username
+    })
+    user.auth.fcm_token = fcm_token;
+    user.save();
+
+    res.status(200).json({
+      'message': 'fcm_token updated successfully'
+    });
+
+  } catch (err) {
+    res.status(406).json({
+      'message': err.message
+    });
+  }
+
 }
 
 /* 

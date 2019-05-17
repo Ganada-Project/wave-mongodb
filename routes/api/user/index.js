@@ -5,4 +5,6 @@ router.get('/list', controller.list)
 router.get('/me', controller.me);
 router.post('/assign-admin/:username', controller.assignAdmin)
 
+router.post('/fcm', controller.updateFCM);
+
 module.exports = router
