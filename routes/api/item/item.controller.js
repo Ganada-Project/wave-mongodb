@@ -89,10 +89,10 @@ exports.rentItemByItemId = async (req, res) => {
     try {
         let item = await Item.findOneById(item_id);
         item.reservation += 1;
-        await item.save();
+        item = await item.save();
         let user = await User.findOneByUsername(req.decoded.username);
         let object = {
-            _id: item_id,
+            item,
             rent_time: new Date()
         }
         if ((user.shopping.hanger - item.coin) > 0) {
@@ -110,7 +110,7 @@ exports.rentItemByItemId = async (req, res) => {
 
     } catch (err) {
         res.status(406).json({
-            err
+            "message":err.message
         })
     }
 
