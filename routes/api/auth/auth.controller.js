@@ -190,3 +190,23 @@ exports.phoneNumberCheck = async(req, res) => {
     })
   }
 }
+
+exports.userNameCheck = async(req, res) => {
+  try {
+    let user = await User.findOneByUsername(req.query.username);
+    
+    if (user) {
+      res.status(200).json({
+        message: 'username unavailable'
+      })
+    } else {
+      res.status(200).json({
+        message: 'username available'
+      })
+    }
+  } catch (err) {
+    res.status(406).json({
+      message: err.message
+    })
+  }
+}

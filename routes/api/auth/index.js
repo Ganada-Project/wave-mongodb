@@ -9,5 +9,5 @@ router.use('/check', authMiddleware)
 router.get('/check', controller.check)
 
 router.get('/phone', controller.phoneNumberCheck);
-
+router.get('/username', controller.userNameCheck);
 module.exports = router
