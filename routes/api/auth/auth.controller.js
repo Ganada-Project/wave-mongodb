@@ -177,11 +177,11 @@ exports.phoneNumberCheck = async(req, res) => {
     let user = await User.findOneByPhone(req.query.phone);
     if (user) {
       res.status(200).json({
-        message: 'phone number unavailable'
+        overlap: true
       })
     } else {
       res.status(200).json({
-        message: 'phone number available'
+        overlap: false
       })
     }
   } catch (err) {
@@ -197,11 +197,11 @@ exports.userNameCheck = async(req, res) => {
     
     if (user) {
       res.status(200).json({
-        message: 'username unavailable'
+        overlap: true
       })
     } else {
       res.status(200).json({
-        message: 'username available'
+        overlap: false
       })
     }
   } catch (err) {
