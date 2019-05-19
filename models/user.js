@@ -13,7 +13,7 @@ const User = new Schema({
     },
     shopping: {
         hanger: Number,
-        items: [Object]
+        collection: [Object]
     },
     // Biography
     bio: {
@@ -53,7 +53,7 @@ User.statics.create = function (username, password, fcm_token, name, phone, addr
         },
         shopping: {
             hanger: 0,
-            items: []
+            collection: []
         },
         bio: {
             name,
