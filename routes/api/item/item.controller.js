@@ -115,3 +115,56 @@ exports.rentItemByItemId = async (req, res) => {
     }
 
 }
+
+exports.addCollection = async(req, res) => {
+    const { collection_name } = req.body;
+    try {
+        // GET ITEM
+        // let item = await Item.findOneById(item_id);
+        // GET USER
+        let user = await User.findOneByUsername(req.decoded.username);
+        let object = {
+            items: [],
+            collection_name: collection_name,
+        }
+        user.shopping.collection.push(object);
+        await user.save();
+        return res.status(200).json({
+            "add_collection": true
+        })
+
+    } catch (err) {
+        res.status(406).json({
+            "message": err.message
+        })
+    }
+}
+
+exports.addToCollection = async (req, res) => {
+    const { collection_name, item_id } = req.body;
+    try {
+        // GET ITEM
+        let item = await Item.findOneById(item_id);
+        // GET USER
+        let user = await User.findOneByUsername(req.decoded.username);
+        for(let i=0;i<user.shopping.collection.length;i++) {
+            if(user.shopping.collection[i].collection_name == collection_name) {
+
+                user.shopping.collection[i].items.push(item);
+                user.markModified('shopping.collection');
+                
+                break;
+            }
+        }
+        
+        await user.save();
+        return res.status(200).json({
+            "add_to_collection": true
+        })
+
+    } catch (err) {
+        res.status(406).json({
+            "message": err.message
+        })
+    }
+}
