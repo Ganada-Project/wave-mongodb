@@ -21,7 +21,7 @@ const User = new Schema({
         phone: String,
         address: String,
         age: Number,
-        gender: Number,
+        gender: Number, // 0->male 1->female
         profile_img_url: String
     },
     // Body Measurements
