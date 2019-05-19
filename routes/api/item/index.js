@@ -17,4 +17,5 @@ router.post('/collection', controller.addCollection);
 router.use('/tocollection', authMiddleware);
 router.post('/tocollection', controller.addToCollection);
 
+router.get('/collection', controller.getCollections);
 module.exports = router;

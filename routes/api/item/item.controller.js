@@ -168,3 +168,18 @@ exports.addToCollection = async (req, res) => {
         })
     }
 }
+
+exports.getCollections = async (req, res) => {
+    try {
+        let user = await User.findOneByUsername(req.decoded.username);
+        return res.status(200).json({
+            "message":"success",
+            "collections":user.shopping.collection
+        })
+
+    } catch (err) {
+        res.status(406).json({
+            "message": err.message
+        })
+    }
+}
