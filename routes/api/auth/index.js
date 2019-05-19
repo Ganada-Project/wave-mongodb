@@ -8,4 +8,6 @@ router.post('/login', controller.login)
 router.use('/check', authMiddleware)
 router.get('/check', controller.check)
 
+router.get('/phone', controller.phoneNumberCheck);
+
 module.exports = router

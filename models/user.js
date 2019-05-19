@@ -84,6 +84,12 @@ User.statics.findOneByUsername = function (username) {
     }).exec()
 };
 
+// phone number format should be 010xxxxxxxx
+User.statics.findOneByPhone = function(phone) {
+    return this.findOne({
+        'bio.phone': phone
+    }).exec()
+};
 
 // verify the password of the User documment
 User.methods.verify = function (password) {

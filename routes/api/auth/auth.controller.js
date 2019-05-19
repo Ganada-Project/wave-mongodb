@@ -171,3 +171,22 @@ exports.check = (req, res) => {
     info: req.decoded
   })
 }
+
+exports.phoneNumberCheck = async(req, res) => {
+  try {
+    let user = await User.findOneByPhone(req.query.phone);
+    if (user) {
+      res.status(200).json({
+        message: 'phone number unavailable'
+      })
+    } else {
+      res.status(200).json({
+        message: 'phone number available'
+      })
+    }
+  } catch (err) {
+    res.status(406).json({
+      message: err.message
+    })
+  }
+}
