@@ -97,7 +97,7 @@ exports.rentItemByItemId = async (req, res) => {
         }
         if ((user.shopping.hanger - item.coin) > 0) {
             user.shopping.hanger -= item.coin;
-            user.shopping.collection.push(object);
+            user.shopping.rent_items.push(object);
             await user.save();
             return res.status(200).json({
                 message: 'rent successfully'

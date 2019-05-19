@@ -13,7 +13,8 @@ const User = new Schema({
     },
     shopping: {
         hanger: Number,
-        collection: [Object]
+        rent_items: [Object], // 빌린 옷
+        collection: [Object] // 개인 옷장
     },
     // Biography
     bio: {
